@@ -6,6 +6,7 @@
 set -x 
 TOP_DIR=$(pwd)
 
+# clean iT
 for f in $(find . -maxdepth 1 -name "openvswitch-*")
 do
      rm -rf $f
