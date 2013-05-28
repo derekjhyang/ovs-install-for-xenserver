@@ -33,8 +33,10 @@ make
 # make distribution tarball 
 make dist 
 
+
 # copy the above tarball to rpm SOURCES
 mv ${OPENVSWITCH_TARBALL} /usr/src/redhat/SOURCES
+
 
 # <openvswitch version> is the version number that appears in the
 #    name of the Open vSwitch tarball, e.g. 0.90.0.
@@ -71,8 +73,8 @@ rpmbuild \
 
 
 cd /usr/src/redhat/RPMS/i386/
-TAR_DIR=xenserver-5.6sp2
-TAR=ovs-xenserver-5.6sp2.tar.gz
+TAR_DIR=ovs_xenserver-5.6.100sp2
+TAR=ovs-ovs_xenserver-5.6.100sp2.tar.gz
 if [ -d ${TAR_DIR} ]; then
     rm -rf ${TAR_DIR}
 fi
