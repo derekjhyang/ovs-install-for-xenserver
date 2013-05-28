@@ -1,50 +1,44 @@
 #!/usr/bin/env bash
 # [WARNING]
-#    be aware the hypervisor kernel version, so here  we adopt openvswitch-1.4.3 
-#
+#    this script MUST run in Xenserver DDK
+#    be aware the hypervisor kernel version, so here we adopt openvswitch-1.4.3 
+#   
 
 set -x 
 TOP_DIR=$(pwd)
 
-# clean iT
+# clean it
 for f in $(find . -maxdepth 1 -name "openvswitch-*")
 do
      rm -rf $f
 done
 
+
 # download openvswitch tarball
 OPENVSWITCH_TARBALL=openvswitch-1.4.3.tar.gz
 wget http://openvswitch.org/releases/${OPENVSWITCH_TARBALL}
-
 # extract it
 tar zxvf ${OPENVSWITCH_TARBALL}
 
-cd ${OPENVSWITCH_TARBALL%".tar.gz"}
 
+cd ${OPENVSWITCH_TARBALL%".tar.gz"}
 # generate config file 
 sh boot.sh
-
 # fix the config file
 sed -i '16a ovs_cv_xsversion=5.6.100'  configure
 ./configure --with-linux=/lib/modules/$(uname -r)/build
 ./configure --prefix=/usr --localstatedir=/var
-
-
 # compile 
 make 
-
 # make distribution tarball 
 make dist 
 
-
-# copy 
+# copy the above tarball to rpm SOURCES
 mv ${OPENVSWITCH_TARBALL} /usr/src/redhat/SOURCES
-
 
 # <openvswitch version> is the version number that appears in the
 #    name of the Open vSwitch tarball, e.g. 0.90.0.
 VERSION=$(echo ${OPENVSWITCH_TARBALL} | egrep -o '([0-9]+\.){2}[0-9]+')
-
 
 # <Xen Kernel name> is the name of the Xen Kernel,
 #    e.g. kernel-xen or kernel-NAME-xen. By convention, the name
